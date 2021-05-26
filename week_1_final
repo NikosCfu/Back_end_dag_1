@@ -1,0 +1,106 @@
+// 1.
+//@Dave Ik vind belangrijker jouw code te begrijpen i.p.v copy/paste te doen.Ik ga commentaar geven en uitleggen de verschilende functies.Ik hoop dat jij er mee eens bent :) 
+echo ' 1 <br>';
+// gelijk een array maken zodat jij hoeft niet de explode functie te gebruiken en dan kan gelijk de foreach gebruiken
+$curseWords = array('bastard', 'shit', 'piss off', 'dick', 'stfu', 'fyfi', 'fuck');
+$niceWords = array('sweet', 'darling', 'pumpkin', 'ducklin', 'happy', 'beautiful');
+
+$originalText = "there are many fucking variations of passages of Lorem Ipsum available, but the shit majority have suffered alteration in some damned form, by injected humour, or randomised words which don't look even slightly believable. if you are going to use a passage of Lorem Ipsum, you need to be fucking sure there isn't anything embarrassing hidden in the middle of text.  all the Lorem Ipsum generators on the dick head Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. it uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.";
+// str_replace(search/1e param is mixed kan str of array zijn, replace/de 2de ook, search/de 3de moet string zijn )
+foreach($curseWords as $curseWord) {
+    $sanitizedText = str_ireplace(
+        $curseWord, 
+        $niceWords[rand(0, count($niceWords)-1)], 
+        $originalText);
+}
+//test of dat werkt
+echo $sanitizedText;
+echo '<br>';
+echo ' 2 <br>';
+// 2.
+/* iedere zin een array van stings maken zodat jij kan de foreach gebruiken voor de $sentences, de trim en de ucfirst voor de strings gebruiken.*/
+$sentences = explode('.', $sanitizedText);
+
+//check of dat klopt
+var_dump($sentences); 
+echo '<br>';
+print_r ($sentences) ;
+/*nieuw leeg string $text 
+met ucfirst de eerste letter van de zin to upper case en gelijk trim omdat $sentence is een string. De $sentences is een array van strings.*/
+$text = '';
+foreach($sentences as $sentence) {
+    $correctedSentence = ucfirst(trim($sentence));
+    /* dus de $correctedSentence is ook een sting en jij kan concatenate.
+    the concatenating assignment operator ('.='), which appends the argument on the right side to the argument on the left side.*/
+    if($correctedSentence) {
+        $text .= $correctedSentence;
+        $text .= '.';
+        $text .= '<br/>';
+    }
+}
+echo '<br>';
+echo ' 3 <br>';
+// 3.
+//css stylen
+echo '<p style="color:white; background-color:gray; border: 2px solid black; margin:10px; padding:15px; border-radius: 10px">';
+echo $text;
+echo '</p >';
+echo ' 4 <br>';
+// 4.
+$maxLength = 100;
+$textLength = strlen($text);
+//check the soort en the length , dus beide $textLength en $maxLength zijn integers
+echo '<br/>';
+var_dump($textLength);
+if($textLength > $maxLength) {
+    $truncatedText = substr($text,0, $maxLength) . '...';
+}
+//The substr() function returns a part of a string. Syntax substr(string,start,length) en darnaa concatenate met ...
+echo '<p>';
+echo $truncatedText;
+echo '</p>';
+
+// 5.
+echo ' 5 <br>';
+$high = '<span style="background:red;color:white">red</span>';  // > 2
+$medium = '<span style="background:yellow">yellow</span>'; // >=1 <2
+$low = '<span style="background: green">green</span>';  // 0
+//$high $medium $low zijn strings
+//test
+echo $originalText;
+echo '<br/>';
+echo strtolower($originalText);
+echo '<br/>';
+$curseWordCounter = 0;
+// de array $words alleen met kleine letters maken en dan kan de foreach gebruiken
+$words = explode(' ', strtolower($originalText));
+/*2xloop De string $word van de array $words gaat loopen in de $curseWords array en if..
+str_contains — Determine if a string contains a given substring
+str_contains ( string $haystack , string $needle ) : bool 
+Dus de str_contains is een boolean en als true is gaat voor de iteratie++ en gaat verder met de if/elseif function en pakt de $high of de $medium 
+*/
+foreach($curseWords as $curseWord) {
+    foreach($words as $word) {
+        if(str_contains($word, $curseWord)) {
+            $curseWordCounter++;
+        }
+    }
+}
+
+$indicator = $low;
+
+if($curseWordCounter >= 1 && $curseWordCounter < 2) {
+    $indicator = $medium;
+} elseif($curseWordCounter > 2) {
+    $indicator = $high;
+}
+
+echo '<p> Number of swear words: ';
+echo $curseWordCounter;
+echo '</p>';
+
+echo 'Indicator: ' . $indicator;
+//dat was bedoeld voor de volgende opdracht (include/footer)
+echo "<p style='text-align: center;color:purple; background-color:lightblue; border: 2px solid black; margin:10px; padding:15px; border-radius: 10px'>Copyright &copy; 2020-" . date("Y") . " Nikos</p>";
+
+?>
